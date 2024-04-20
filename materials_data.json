@@ -1,0 +1,75 @@
+[
+  {
+    "model": "materials.course",
+    "pk": 2,
+    "fields": {
+      "name": "Курс 1",
+      "image": "",
+      "description": "Начинаем"
+    }
+  },
+  {
+    "model": "materials.course",
+    "pk": 3,
+    "fields": {
+      "name": "Курс 2",
+      "image": "",
+      "description": "Продолжаем"
+    }
+  },
+  {
+    "model": "materials.lesson",
+    "pk": 2,
+    "fields": {
+      "name": "Урок 0",
+      "course": 2,
+      "description": "Начало начал!",
+      "image": "",
+      "url": null
+    }
+  },
+  {
+    "model": "materials.lesson",
+    "pk": 3,
+    "fields": {
+      "name": "Урок 1",
+      "course": 2,
+      "description": "Первый урок!",
+      "image": "",
+      "url": null
+    }
+  },
+  {
+    "model": "materials.lesson",
+    "pk": 4,
+    "fields": {
+      "name": "Урок 2",
+      "course": 2,
+      "description": "Второй урок!",
+      "image": "",
+      "url": null
+    }
+  },
+  {
+    "model": "materials.lesson",
+    "pk": 5,
+    "fields": {
+      "name": "Урок 3",
+      "course": 2,
+      "description": "Третий урок!",
+      "image": "",
+      "url": null
+    }
+  },
+  {
+    "model": "materials.lesson",
+    "pk": 6,
+    "fields": {
+      "name": "Урок 1",
+      "course": 3,
+      "description": "Первый урок!",
+      "image": "",
+      "url": null
+    }
+  }
+]
