@@ -124,11 +124,12 @@ class Command(BaseCommand):
         # Обходим все значения платежей из фикстуры для получения информации об одном объекте
         for payment in Command.json_read_payments():
             lesson_paid = Lesson.objects.filter(pk=payment['fields']['lesson_paid']).first()
+            course_paid = Course.objects.filter(pk=payment['fields']['course_paid']).first()
             payments_for_create.append(
                 Payments(id=payment['pk'],
                          user_payer=User.objects.get(pk=payment['fields']['user_payer']),
                          payment_date=payment['fields']['payment_date'],
-                         course_paid=Course.objects.get(pk=payment['fields']['course_paid']),
+                         course_paid=course_paid,
                          lesson_paid=lesson_paid,
                          payment_amount=payment['fields']['payment_amount'],
                          payment_method=payment['fields']['payment_method'])
