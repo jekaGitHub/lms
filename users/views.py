@@ -1,10 +1,12 @@
-from rest_framework.generics import CreateAPIView, UpdateAPIView, ListAPIView, RetrieveAPIView
-from rest_framework import filters
-from rest_framework.permissions import AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+from rest_framework.generics import CreateAPIView, UpdateAPIView, ListAPIView, RetrieveAPIView
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 
 from users.models import User, Payments
-from users.serializers import UserSerializer, PaymentsSerializer, UserForCreateSerializer
+from users.permissions import IsOwner
+from users.serializers import UserSerializer, PaymentsSerializer, UserForCreateSerializer, UserUpdateSerializer
 
 
 # Create your views here.
@@ -22,11 +24,21 @@ class UserCreateApiView(CreateAPIView):
 class UserUpdateApiView(UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated, IsOwner)
 
 
 class UserRetrieveApiView(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.user == self.request.user:
+            serializer = self.get_serializer(instance)
+        else:
+            serializer = UserUpdateSerializer
+        return Response(serializer.data)
 
 
 class PaymentsListAPIView(ListAPIView):
