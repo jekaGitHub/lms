@@ -1,7 +1,10 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from materials.models import NULLABLE, Course, Lesson
+from materials.models import Course, Lesson
+
+
+NULLABLE = {"blank": True, "null": True}
 
 
 # Create your models here.
