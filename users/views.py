@@ -34,7 +34,7 @@ class UserRetrieveApiView(RetrieveAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        if instance.email == self.request.user:
+        if instance.id == self.request.user.id:
             serializer = self.get_serializer(instance)
         else:
             serializer = UserUpdateSerializer
