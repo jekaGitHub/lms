@@ -110,7 +110,7 @@ class LessonTestCase(APITestCase):
 
         self.course = Course.objects.create(name="Тест", description="Новое тестовое описание", owner=self.user)
         self.lesson = Lesson.objects.create(name="Урок для теста", course=self.course,
-                                            description="Тестовое описание для урока", url="https://youtube.com",
+                                            description="Тестовое описание для урока", url="https://www.youtube.com/",
                                             owner=self.user)
         self.client.force_authenticate(user=self.user)
 
@@ -188,7 +188,7 @@ class LessonTestCase(APITestCase):
                     "name": self.lesson.name,
                     "description": self.lesson.description,
                     "image": None,
-                    "url": 'https://youtube.com',
+                    "url": "https://www.youtube.com/",
                     "course": self.course.pk,
                     "owner": self.user.pk
                 }
