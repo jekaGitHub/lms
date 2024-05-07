@@ -43,3 +43,61 @@ class CourseTestCase(APITestCase):
         self.assertEqual(
             Course.objects.all().count(), 2
         )
+
+    def test_course_update(self):
+        """Тестирование обновления курса."""
+        url = reverse("materials:course-detail", args=(self.course.pk,))
+        data = {
+            "name": "Обновлённый"
+        }
+        response = self.client.patch(url, data)
+        data = response.json()
+
+        self.assertEqual(
+            response.status_code, status.HTTP_200_OK
+        )
+
+        self.assertEqual(
+            data.get("name"), "Обновлённый"
+        )
+
+    def test_course_delete(self):
+        """Тестирование удаления курса."""
+        url = reverse("materials:course-detail", args=(self.course.pk,))
+        response = self.client.delete(url)
+
+        self.assertEqual(
+            response.status_code, status.HTTP_204_NO_CONTENT
+        )
+
+        self.assertEqual(
+            Course.objects.all().count(), 0
+        )
+
+    def test_course_list(self):
+        """Тестирование вывода списка курсов."""
+        url = reverse("materials:course-list")
+        response = self.client.get(url)
+        data = response.json()
+        result = {
+                "count": 1,
+                "next": None,
+                "previous": None,
+                "results": [
+                    {
+                        "id": self.course.pk,
+                        "lessons_count": 0,
+                        "lessons_info": [],
+                        "name": self.course.name,
+                        "image": None,
+                        "description": self.course.description,
+                        "owner": self.user.pk
+                    }
+                ]
+        }
+        self.assertEqual(
+            response.status_code, status.HTTP_200_OK
+        )
+        self.assertEqual(
+            data, result
+        )
