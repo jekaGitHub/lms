@@ -17,7 +17,8 @@ class CourseSerializer(ModelSerializer):
 
     lessons_info = LessonSerializer(
         source='lessons',
-        many=True
+        many=True,
+        read_only=True,
     )
 
     class Meta:
