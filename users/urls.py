@@ -7,7 +7,8 @@ from rest_framework_simplejwt.views import (
 from rest_framework.permissions import AllowAny
 
 from users.apps import UsersConfig
-from users.views import UserCreateApiView, UserUpdateApiView, PaymentsListAPIView, UserRetrieveApiView
+from users.views import (UserCreateApiView, UserUpdateApiView, PaymentsListAPIView, UserRetrieveApiView,
+                         SubscriptionCreateApiView)
 
 app_name = UsersConfig.name
 
@@ -21,4 +22,7 @@ urlpatterns = [
 
     # payments
     path("payments/", PaymentsListAPIView.as_view(), name="payments-list"),
+
+    # subscriptions
+    path("subscriptions/", SubscriptionCreateApiView.as_view(), name="subscriptions-create"),
 ]

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from config import settings
 from materials.models import Course, Lesson, NULLABLE
 
 
@@ -79,3 +80,31 @@ class Payments(models.Model):
         help_text="Выберите способ оплаты",
         **NULLABLE
     )
+
+    def __str__(self):
+        return f'{self.user_payer} - {self.course_paid}({self.payment_amount})'
+
+    class Meta:
+        verbose_name = "Платёж"
+        verbose_name_plural = "Платежи"
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE,
+                             verbose_name="Пользователь подписки",
+                             **NULLABLE,
+                             help_text="Укажите пользователя подписки")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE,
+                               related_name="subscriptions",
+                               verbose_name="Курс для подписки",
+                               help_text="Укажите курс для подписки",
+                               **NULLABLE)
+    is_active = models.BooleanField(default=False, verbose_name="Активность подписки")
+
+    def __str__(self):
+        return f'{self.user} - {self.course}({self.is_active})'
+
+    class Meta:
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"
