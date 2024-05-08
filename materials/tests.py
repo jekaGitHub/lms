@@ -165,8 +165,7 @@ class LessonTestCase(APITestCase):
         """Тестирование удаления урока."""
         url = reverse("materials:lessons-delete", args=(self.lesson.pk,))
         response = self.client.delete(url)
-        # print(response.json())
-        print(response.data)
+
         self.assertEqual(
             response.status_code, status.HTTP_204_NO_CONTENT
         )
@@ -201,4 +200,24 @@ class LessonTestCase(APITestCase):
         )
         self.assertEqual(
             data, result
+        )
+
+    def test_validator(self):
+        data = {
+            "name": "Для валидатора",
+            "url": "https://www.test.com/"
+        }
+        url = reverse("materials:lessons-create")
+
+        response = self.client.post(url, data)
+        print(response.json())
+        # print(response.data)
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST
+        )
+
+        self.assertEqual(
+            response.json(),
+            {'url': ["Нельзя использовать ссылки на сторонние ресурсы."]}
         )
