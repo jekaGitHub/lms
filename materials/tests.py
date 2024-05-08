@@ -107,7 +107,7 @@ class CourseTestCase(APITestCase):
 class LessonTestCase(APITestCase):
 
     def setUp(self):
-        self.user = User.objects.create(email='user@example.com', password="12345")
+        self.user = User.objects.create(email='test4@test.ru', password="123qwe4")
 
         self.course = Course.objects.create(name="Тест", description="Новое тестовое описание", owner=self.user)
         self.lesson = Lesson.objects.create(name="Урок для теста", course=self.course,
@@ -165,7 +165,8 @@ class LessonTestCase(APITestCase):
         """Тестирование удаления урока."""
         url = reverse("materials:lessons-delete", args=(self.lesson.pk,))
         response = self.client.delete(url)
-        print(response.json())
+        # print(response.json())
+        print(response.data)
         self.assertEqual(
             response.status_code, status.HTTP_204_NO_CONTENT
         )
