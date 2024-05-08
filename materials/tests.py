@@ -36,7 +36,7 @@ class CourseTestCase(APITestCase):
             "name": "Экспериментальный"
         }
         response = self.client.post(url, data)
-        # print(response.json())
+
         self.assertEqual(
             response.status_code, status.HTTP_201_CREATED
         )
@@ -88,6 +88,7 @@ class CourseTestCase(APITestCase):
                     "id": self.course.pk,
                     "lessons_count": 0,
                     "lessons_info": [],
+                    "is_subscription": False,
                     "name": self.course.name,
                     "image": None,
                     "description": self.course.description,
@@ -135,7 +136,7 @@ class LessonTestCase(APITestCase):
             "name": "Экспериментальный"
         }
         response = self.client.post(url, data)
-        print(response.json())
+
         self.assertEqual(
             response.status_code, status.HTTP_201_CREATED
         )
@@ -143,35 +144,35 @@ class LessonTestCase(APITestCase):
             Lesson.objects.all().count(), 2
         )
 
-    # def test_lesson_update(self):
-    #     """Тестирование обновления урока."""
-    #     url = reverse("materials:lessons-update", args=(self.lesson.pk,))
-    #     data = {
-    #         "name": "Обновлённый"
-    #     }
-    #     response = self.client.patch(url, data)
-    #     data = response.json()
-    #
-    #     self.assertEqual(
-    #         response.status_code, status.HTTP_200_OK
-    #     )
-    #
-    #     self.assertEqual(
-    #         data.get("name"), "Обновлённый"
-    #     )
+    def test_lesson_update(self):
+        """Тестирование обновления урока."""
+        url = reverse("materials:lessons-update", args=(self.lesson.pk,))
+        data = {
+            "name": "Обновлённый"
+        }
+        response = self.client.patch(url, data)
+        data = response.json()
 
-    # def test_lesson_delete(self):
-    #     """Тестирование удаления урока."""
-    #     url = reverse("materials:lessons-delete", args=(self.lesson.pk,))
-    #     response = self.client.delete(url)
-    #
-    #     self.assertEqual(
-    #         response.status_code, status.HTTP_204_NO_CONTENT
-    #     )
-    #
-    #     self.assertEqual(
-    #         Lesson.objects.all().count(), 0
-    #     )
+        self.assertEqual(
+            response.status_code, status.HTTP_200_OK
+        )
+
+        self.assertEqual(
+            data.get("name"), "Обновлённый"
+        )
+
+    def test_lesson_delete(self):
+        """Тестирование удаления урока."""
+        url = reverse("materials:lessons-delete", args=(self.lesson.pk,))
+        response = self.client.delete(url)
+        print(response.json())
+        self.assertEqual(
+            response.status_code, status.HTTP_204_NO_CONTENT
+        )
+
+        self.assertEqual(
+            Lesson.objects.all().count(), 0
+        )
 
     def test_lesson_list(self):
         """Тестирование вывода списка уроков."""
