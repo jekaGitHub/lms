@@ -7,5 +7,5 @@ class UrlValidator:
 
     def __call__(self, value):
         tmp_val = dict(value).get(self.field)
-        if tmp_val not in ('youtube.com',):
+        if tmp_val and 'youtube.com' not in tmp_val:
             raise ValidationError("Нельзя использовать ссылки на сторонние ресурсы.")
