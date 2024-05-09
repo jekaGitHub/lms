@@ -9,6 +9,7 @@ from users.models import User, Payments, Subscription
 from users.permissions import IsOwner
 from users.serializers import UserSerializer, PaymentsSerializer, UserForCreateSerializer, UserUpdateSerializer, \
     SubscriptionSerializer
+from users.services import create_stripe_product, create_stripe_price, create_stripe_session
 
 
 # Create your views here.
@@ -41,6 +42,17 @@ class UserRetrieveApiView(RetrieveAPIView):
         else:
             serializer = UserUpdateSerializer
         return Response(serializer.data)
+
+
+class PaymentCreateAPIView(CreateAPIView):
+    serializer_class = PaymentsSerializer
+
+    def perform_create(self, serializer):
+        payment = serializer.save(user=self.request.user)
+        stripe_product_id = create_stripe_product(payment)
+        stripe_price_id = create_stripe_price(payment, stripe_product_id)
+        payment.session_id, payment.link_pay = create_stripe_session(stripe_price_id)
+        payment.save()
 
 
 class PaymentsListAPIView(ListAPIView):

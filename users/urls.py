@@ -8,7 +8,7 @@ from rest_framework.permissions import AllowAny
 
 from users.apps import UsersConfig
 from users.views import (UserCreateApiView, UserUpdateApiView, PaymentsListAPIView, UserRetrieveApiView,
-                         SubscriptionCreateApiView)
+                         SubscriptionCreateApiView, PaymentCreateAPIView)
 
 app_name = UsersConfig.name
 
@@ -21,6 +21,7 @@ urlpatterns = [
     path("<int:pk>/", UserRetrieveApiView.as_view(), name="users-retrieve"),
 
     # payments
+    path("payment/", PaymentCreateAPIView.as_view(), name="payment"),
     path("payments/", PaymentsListAPIView.as_view(), name="payments-list"),
 
     # subscriptions
