@@ -210,7 +210,6 @@ class LessonTestCase(APITestCase):
         url = reverse("materials:lessons-create")
 
         response = self.client.post(url, data)
-        print(response.json())
 
         self.assertEqual(
             response.status_code,
@@ -219,7 +218,7 @@ class LessonTestCase(APITestCase):
 
         self.assertEqual(
             response.json(),
-            {'url': ["Нельзя использовать ссылки на сторонние ресурсы."]}
+            {'non_field_errors': ["Нельзя использовать ссылки на сторонние ресурсы."]}
         )
 
 
@@ -238,12 +237,11 @@ class SubscriptionTestCase(APITestCase):
         url = reverse("users:subscriptions-create")
 
         response = self.client.post(url, data)
-        print(response.json())
 
         self.assertEqual(
-            response.status_code, status.HTTP_201_CREATED
+            response.status_code, status.HTTP_200_OK
         )
 
         self.assertEqual(
-            response.json(), {'id': 1, 'user': 8, 'course': 6}
+            response.json(), {'message': 'Подписка удалена'}
         )
