@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from materials.models import Course, Lesson
-from users.models import User
+from users.models import User, Subscription
 
 
 # Create your tests here.
@@ -211,7 +211,7 @@ class LessonTestCase(APITestCase):
 
         response = self.client.post(url, data)
         print(response.json())
-        # print(response.data)
+
         self.assertEqual(
             response.status_code,
             status.HTTP_400_BAD_REQUEST
@@ -220,4 +220,30 @@ class LessonTestCase(APITestCase):
         self.assertEqual(
             response.json(),
             {'url': ["Нельзя использовать ссылки на сторонние ресурсы."]}
+        )
+
+
+class SubscriptionTestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create(email='test5@test.ru', password="123qwe5")
+        self.client.force_authenticate(user=self.user)
+        self.course = Course.objects.create(name="Новый курс", description="Описание для нового курса", owner=self.user)
+        self.subscription = Subscription.objects.create(course=self.course, user=self.user)
+
+    def test_subscription_create(self):
+        data = {
+            "user": self.user.id,
+            "course": self.course.id,
+        }
+        url = reverse("users:subscriptions-create")
+
+        response = self.client.post(url, data)
+        print(response.json())
+
+        self.assertEqual(
+            response.status_code, status.HTTP_201_CREATED
+        )
+
+        self.assertEqual(
+            response.json(), {'id': 1, 'user': 8, 'course': 6}
         )
