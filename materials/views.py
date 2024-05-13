@@ -9,9 +9,11 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 
 from materials.models import Course, Lesson
+from materials.tasks import send_about_update_materials
 from materials.paginations import CoursePagination, LessonPagination
 from materials.serializers import CourseSerializer, LessonSerializer
 from users.permissions import IsModer, IsOwner
+from users.models import Subscription
 
 
 class CourseViewSet(ModelViewSet):
@@ -32,6 +34,15 @@ class CourseViewSet(ModelViewSet):
         elif self.action == 'destroy':
             self.permission_classes = (IsOwner | ~IsModer,)
         return super().get_permissions()
+
+    def update(self, request, *args, **kwargs):
+        """Отправка пользователям, имеющим подписку на курс, информации об обновлении курса."""
+        # Список пользователей, подписанных на курс
+        email_list = list(Subscription.objects.filter(course=kwargs['pk']).values_list('user__email', flat=True))
+
+        send_about_update_materials.delay(email_list)
+
+        return super().update(request, *args, **kwargs)
 
 
 class LessonCreateApiView(CreateAPIView):
