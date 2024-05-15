@@ -75,6 +75,7 @@ class Payments(models.Model):
     )
     payment_method = models.CharField(
         choices=PAYMENT_METHOD,
+        max_length=255,
         default="daily",
         verbose_name="Способ оплаты",
         help_text="Выберите способ оплаты",
