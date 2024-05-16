@@ -35,13 +35,13 @@ class UserRetrieveApiView(RetrieveAPIView):
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticated,)
 
-    def retrieve(self, request, *args, **kwargs):
+    def get_serializer_class(self):
         instance = self.get_object()
         if instance.id == self.request.user.id:
-            serializer = self.get_serializer(instance)
+            serializer = super().get_serializer_class()
         else:
             serializer = UserUpdateSerializer
-        return Response(serializer.data)
+        return serializer
 
 
 class PaymentCreateAPIView(CreateAPIView):

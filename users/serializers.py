@@ -37,4 +37,4 @@ class UserUpdateSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ("password", "last_name", "payments")
+        exclude = ("password", "last_name")

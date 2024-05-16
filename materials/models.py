@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 
 from config import settings
@@ -65,6 +67,16 @@ class Lesson(models.Model):
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE, verbose_name="Владелец урока",
                               help_text="Укажите владельца урока")
+
+    # created = models.DateTimeField(auto_now_add=True)
+    # updated = models.DateTimeField(auto_now=True)
+
+    # def save(self, *args, **kwargs):
+    #     if self.pk:
+    #         old_lesson = Lesson.objects.get(pk=self.pk)
+    #         now = datetime.datetime.now()
+    #         if (now - old_lesson.updated).seconds > 60 * 60 * 4:
+                # рассылать пользователям сообщение о том, что урок обновился
 
     def __str__(self):
         return f"{self.name}"

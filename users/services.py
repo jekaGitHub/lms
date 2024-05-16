@@ -8,7 +8,7 @@ stripe.api_key = STRIPE_API_KEY
 def create_stripe_product(product):
     """Функция создания продукта в Stripe."""
 
-    title_product = f'{product.payments_course.name}' if product.payments_course.name else f'{product.payments_lesson.name}'
+    title_product = f'{product.course_paid.name}' if product.course_paid.name else f'{product.lesson_paid.name}'
     stripe_product = stripe.Product.create(name=f'{title_product}')
     return stripe_product['id']
 
@@ -18,7 +18,7 @@ def create_stripe_price(product, id_product):
 
     return stripe.Price.create(
         currency='rub',
-        unit_amount=product.payment_amount * 100,
+        unit_amount=int(product.payment_amount * 100),
         product=id_product,
     )
 

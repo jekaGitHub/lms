@@ -227,9 +227,27 @@ class SubscriptionTestCase(APITestCase):
         self.user = User.objects.create(email='test5@test.ru', password="123qwe5")
         self.client.force_authenticate(user=self.user)
         self.course = Course.objects.create(name="Новый курс", description="Описание для нового курса", owner=self.user)
-        self.subscription = Subscription.objects.create(course=self.course, user=self.user)
 
     def test_subscription_create(self):
+        data = {
+            "user": self.user.id,
+            "course": self.course.id,
+        }
+        url = reverse("users:subscriptions-create")
+
+        response = self.client.post(url, data)
+
+        self.assertEqual(
+            response.status_code, status.HTTP_200_OK
+        )
+
+        self.assertEqual(
+            response.json(), {'message': 'Подписка добавлена'}
+        )
+
+    def test_subscription_delete(self):
+        self.subscription = Subscription.objects.create(course=self.course, user=self.user)
+
         data = {
             "user": self.user.id,
             "course": self.course.id,
